@@ -1,91 +1,102 @@
-import User from '../models/User.js'
+import User from '../models/User.js';
 
 export const createUser = async (req, res) => {
     const body = req.body;
 
-    if(!body) {
+    if (!body) {
         return res.status(400).json({
             success: false,
-            error: 'You need to provide user data'
-        })
+            error: 'You need to provide user data',
+        });
     }
 
-    
-    const user = await new User(body)
+    const user = await new User(body);
 
-    if(!user) {
+    if (!user) {
         return res.status(400).json({
             success: false,
-            error: 'User not created'
-        })
+            error: 'User not created',
+        });
     }
 
-    user
-        .save()
+    user.save()
         .then(() => {
             return res.status(201).json({
                 success: true,
                 id: user._id,
-                message: 'User created'
-            })
+                message: 'User created',
+            });
         })
-        .catch(error => {
+        .catch((error) => {
             return res.status(400).json({
                 error,
-                message: 'User not created'
-            })
-        })
-}
+                message: 'User not created',
+            });
+        });
+};
 
 export const deleteUser = async (req, res) => {
-    await User.findOneAndDelete({_id: req.params.id}, (err, user) => {
-        if(err) {
+    await User.findOneAndDelete({ _id: req.params.id }, (err, user) => {
+        if (err) {
             return res.status(400).json({
                 success: false,
-                error: err
-            })
+                error: err,
+            });
         }
 
-        if(!user) {
-            return res.status(404).json({success: false, error: 'User not found'})
+        if (!user) {
+            return res
+                .status(404)
+                .json({ success: false, error: 'User not found' });
         }
 
-        return res.status(200).json({success: true, data: user})
-    }).catch(err => console.log(err))
-}
+        return res.status(200).json({ success: true, data: user });
+    }).catch((err) => console.log(err));
+};
 
-export const getUserById = async(req, res) => {
-    await User.findById({id: req._id}, (err, user) => {
-        if(err) {
+export const getUserById = async (req, res) => {
+    await User.findById({ id: req._id }, (err, user) => {
+        if (err) {
             return res.status(400).json({
                 success: false,
-                error: err
-            })
+                error: err,
+            });
         }
 
-        if(!user) {
+        if (!user) {
             return res.status(404).json({
                 success: false,
-                error: 'User not found'
-            })
+                error: 'User not found',
+            });
         }
-        return res.status(200).json({success: true, data: user})
-    }).catch(err => console.log(err))
-}
+        return res.status(200).json({ success: true, data: user });
+    }).catch((err) => console.log(err));
+};
 
-export const getUsers = async(req, res) => {
+export const getUsers = async (req, res) => {
     await User.find({}, (err, users) => {
-        if(err) {
-            return res.status(400).json({success: false, error: err})
+        if (err) {
+            return res.status(400).json({ success: false, error: err });
         }
-        if(!users.length) {
-            return res.status(404).json({success: false, error: 'User not found'})
+        if (!users.length) {
+            return res
+                .status(404)
+                .json({ success: false, error: 'User not found' });
         }
-        let result = users.map(user => {
-                const {password, isAdmin, createdAt, updatedAt, _id, ...otherDetails} = user._doc;
-                return {id: _id, ...otherDetails};
+        let result = users.map((user) => {
+            const {
+                password,
+                isAdmin,
+                createdAt,
+                updatedAt,
+                _id,
+                ...otherDetails
+            } = user._doc;
+            return { id: _id, ...otherDetails };
         });
-    
-        return res.status(200).json({ success: true, data: result})
-    }).clone().catch(err => console.log(err))
-}
+
+        return res.status(200).json({ success: true, data: result });
+    })
+        .clone()
+        .catch((err) => console.log(err));
+};

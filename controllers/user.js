@@ -6,7 +6,7 @@ export const createUser = async (req, res) => {
     if(!body) {
         return res.status(400).json({
             success: false,
-            error: 'You must provide a movie'
+            error: 'You need to provide user data'
         })
     }
 
@@ -16,7 +16,7 @@ export const createUser = async (req, res) => {
     if(!user) {
         return res.status(400).json({
             success: false,
-            error: err
+            error: 'User not created'
         })
     }
 
@@ -81,6 +81,11 @@ export const getUsers = async(req, res) => {
         if(!users.length) {
             return res.status(404).json({success: false, error: 'User not found'})
         }
-        return res.status(200).json({ success: true, data: users})
+        let result = users.map(user => {
+                const {password, isAdmin, createdAt, updatedAt, _id, ...otherDetails} = user._doc;
+                return {id: _id, ...otherDetails};
+        });
+    
+        return res.status(200).json({ success: true, data: result})
     }).clone().catch(err => console.log(err))
 }

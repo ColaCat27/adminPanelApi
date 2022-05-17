@@ -6,6 +6,7 @@ import mongoose from 'mongoose'
 
 import userRoute from './routes/user.js'
 import authRoute from './routes/auth.js'
+import productRoute from './routes/product.js';
 
 const app = express()
 dotenv.config()
@@ -40,7 +41,8 @@ app.use((err, req, res, next) => {
 })
 
 app.use('/api/auth', authRoute)
-app.use('/api/user', userRoute)
+app.use('/api/users', userRoute)
+app.use('/api/product', productRoute)
 
 app.listen(process.env.PORT, () => {
     console.log('Server ON!')

@@ -6,7 +6,11 @@ const User = new Schema(
     {
         username: {type: String, required: true, unique: true},
         password: {type: String, required: true},
-        isAdmin: {type: Boolean, default: false}
+        isAdmin: {type: Boolean, default: false},
+        email: {type: String, default: ""},
+        age: {type: Number, default: 0},
+        status: {type: String, default: "active"},
+
     },
     {timestamps: true}
 )

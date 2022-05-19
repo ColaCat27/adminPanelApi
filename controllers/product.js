@@ -129,9 +129,16 @@ export const getProducts = async (req, res) => {
             });
         }
 
+        let result = products.map((product) => {
+            const { createdAt, updatedAt, _id, ...otherDetails } = product._doc;
+            return { id: _id, ...otherDetails };
+        });
+
         return res.status(200).json({
             success: true,
-            data: products,
+            data: result,
         });
-    });
+    })
+        .clone()
+        .catch((err) => console.log(err));
 };

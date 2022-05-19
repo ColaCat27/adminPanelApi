@@ -25,6 +25,10 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 
+app.use('/api/auth', authRoute);
+app.use('/api/users', userRoute);
+app.use('/api/products', productRoute);
+
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500;
     const errorMessage = err.message || 'Something went wrong';
@@ -35,10 +39,6 @@ app.use((err, req, res, next) => {
         stack: err.stack,
     });
 });
-
-app.use('/api/auth', authRoute);
-app.use('/api/users', userRoute);
-app.use('/api/products', productRoute);
 
 app.listen(process.env.PORT, () => {
     console.log('Server ON!');

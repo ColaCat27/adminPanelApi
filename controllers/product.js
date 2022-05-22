@@ -1,4 +1,5 @@
 import Product from '../models/Product.js';
+import User from '../models/User.js';
 
 export const createProduct = async (req, res, next) => {
     const newProduct = new Product(req.body);
@@ -41,6 +42,19 @@ export const getProducts = async (req, res, next) => {
     try {
         const products = await Product.find();
         res.status(200).json(products);
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const getCount = async (req, res, next) => {
+    try {
+        const productsCount = await Product.countDocuments();
+        const usersCount = await User.countDocuments();
+        res.status(200).json([
+            { type: 'users', count: usersCount },
+            { type: 'products', count: productsCount },
+        ]);
     } catch (err) {
         next(err);
     }

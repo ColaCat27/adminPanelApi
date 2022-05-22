@@ -1,4 +1,15 @@
 import User from '../models/User.js';
+
+export const createUser = async (req, res, next) => {
+    try {
+        const user = new User(req.body);
+        const savedUser = await user.save();
+        res.status(200).json(savedUser);
+    } catch (err) {
+        next(err);
+    }
+};
+
 export const updateUser = async (req, res, next) => {
     try {
         const updatedUser = await User.findByIdAndUpdate(
